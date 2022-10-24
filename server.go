@@ -7,7 +7,16 @@ import (
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hi from the server %s", r.URL.Path[1:])
+
+	//path := r.URL.Path[1:]
+	base := "."
+
+	files := GetFiles(base)
+	var resp string
+	for _, n := range files {
+		resp += n + "<br/>"
+	}
+	fmt.Fprintf(w, "<html>%s</html>", resp)
 }
 func main() {
 	fmt.Print("Server starting")
