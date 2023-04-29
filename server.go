@@ -47,7 +47,7 @@ func main() {
 	if len(os.Args) > 1 {
 		basePath = os.Args[1]
 	}
-	fmt.Print("Server starting")
+	fmt.Print("Server started on 8080.")
 	http.HandleFunc("/", handler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
