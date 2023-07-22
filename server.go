@@ -9,6 +9,20 @@ import (
 	"strconv"
 )
 
+func GetFiles(path string) []string {
+	files, err := os.ReadDir(path)
+
+	var result []string
+	if err == nil {
+
+		for _, f := range files {
+			result = append(result, f.Name())
+		}
+	}
+
+	return result
+}
+
 func handler(w http.ResponseWriter, r *http.Request) {
 
 	upath := r.URL.Path[1:]
@@ -47,7 +61,7 @@ func main() {
 	if len(os.Args) > 1 {
 		basePath = os.Args[1]
 	}
-	fmt.Print("Server starting")
+	fmt.Print("Server starting on 8080")
 	http.HandleFunc("/", handler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
