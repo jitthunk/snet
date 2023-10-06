@@ -3,11 +3,25 @@ package main
 import (
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strconv"
 )
+
+// Get preferred outbound ip of this machine
+func GetOutboundIP() net.IP {
+	conn, err := net.Dial("udp", "8.8.8.8:80")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer conn.Close()
+
+	localAddr := conn.LocalAddr().(*net.UDPAddr)
+
+	return localAddr.IP
+}
 
 func GetFiles(path string) []string {
 	files, err := os.ReadDir(path)
@@ -61,7 +75,7 @@ func main() {
 	if len(os.Args) > 1 {
 		basePath = os.Args[1]
 	}
-	fmt.Print("Server starting on 8080")
+	fmt.Printf("Server starting on %s 8080", GetOutboundIP())
 	http.HandleFunc("/", handler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
